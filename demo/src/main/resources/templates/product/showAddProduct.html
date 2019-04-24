@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <link rel="shortcut icon" href="../admins/img/favicon.png">
+    <link rel="stylesheet" type="text/css" href="../admins/css/validator.css">
+    <title>XIAO MI</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../admins/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../admins/css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <link href="../admins/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="../admins/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="../admins/css/owl.carousel.css" type="text/css">
+
+    <link rel="stylesheet" href="../admins/assets/data-tables/DT_bootstrap.css" />
+    <!--right slidebar-->
+    <link href="../admins/css/slidebars.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+
+    <link href="../admins/css/style.css" rel="stylesheet">
+    <link href="../admins/css/style-responsive.css" rel="stylesheet" />
+
+</head>
+
+<body>
+
+<section id="container" >
+    <!--header start-->
+    <header class="header white-bg">
+        <div class="sidebar-toggle-box">
+            <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+        </div>
+        <!--logo start-->
+        <a th:href="@{/login-allot}" class="logo">XIAO<span>MI</span></a>
+
+        <a class="logo">
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            小米商城
+            <span>
+                管理平台
+            </span>
+        </a>
+
+        <!--logo end-->
+
+        <div class="top-nav ">
+            <!--search & user info start-->
+            <ul class="nav pull-right top-menu">
+                <!--<li>-->
+                <!--<input type="text" class="form-control search" placeholder="Search">-->
+                <!--</li>-->
+                <!-- user login dropdown start-->
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <img th:src="'../update/portrait/'+${user.portraitUrl}" width="30px", hight="30px">
+                        <span th:text="${user.name}" class="username" >Jhon Doue</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <div class="log-arrow-up"></div>
+                        <li><a th:href="@{'/user/'+${user.userId}}" href="#"><i class=" fa fa-suitcase"></i>个人资料</a></li>
+                        <li><a th:href="@{/}"><i class="fa fa-cog"></i> 网站首页</a></li>
+                        <!--<li><a href="#"><i class="fa fa-bell-o"></i> Notification</a></li>-->
+                        <li><a th:href="@{/logout}"><i class="fa fa-key"></i> 注销</a></li>
+                    </ul>
+                </li>
+                <li class="sb-toggle-right">
+                    <i class="fa  fa-align-right"></i>
+                </li>
+                <!-- user login dropdown end -->
+            </ul>
+            <!--search & user info end-->
+        </div>
+    </header>
+    <!--header end-->
+    <!--sidebar start-->
+    <aside>
+        <div id="sidebar"  class="nav-collapse ">
+            <!-- sidebar menu start-->
+            <ul class="sidebar-menu" id="nav-accordion">
+                <li>
+                    <a href="/adminIndex">
+                        <i class="fa fa-dashboard"></i>
+                        <span>仪表盘</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a th:href="@{'/user/'+${user.userId}}">
+                        <i class="fa fa-user"></i>
+                        <span>个人资料</span>
+                    </a>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;" >
+                        <i class="fa fa-book"></i>
+                        <span>用户管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a th:href="@{/user/list}">普通用户</a></li>
+                        <li><a th:href="@{/user/adminlist}" >管理员列表</a></li>
+                    </ul>
+                </li>
+                <!-- 商品种类-->
+                <li class="sub-menu">
+                    <a href="javascript:;"  >
+                        <i class="fa fa-th"></i>
+                        <span>商品种类管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li ><a  href="/category/list">种类信息</a></li>
+                        <li ><a  href="/category/addcategory?flag=1">增加商品种类</a></li>
+                    </ul>
+                </li>
+                <!--商品管理-->
+                <li class="sub-menu">
+                    <a href="javascript:;" class="active">
+                        <i class="fa fa-bar-chart-o"></i>
+                        <span>商品管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a  href="/product/list">商品列表</a></li>
+                        <li class="active"><a  href="/product/addproduct?flag=1">增加商品</a></li>
+                    </ul>
+                </li>
+
+
+                <li class="sub-menu">
+                    <a href="javascript:;" >
+                        <i class="fa fa-tasks"></i>
+                        <span>订单管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="/adminOrder/newOrder">待发货</a></li>
+                        <li><a href="/adminOrder/shippedOrder">已发货</a></li>
+                        <li><a href="/adminOrder/completeOrder">确认收货</a></li>
+                        <li><a href="/adminOrder/askReturnOrder">请求退货</a></li>
+                        <li><a href="/adminOrder/returnedOrder">已退货</a></li>
+                        <li><a href="/adminOrder/seekOrder">查找订单</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+            <!-- sidebar menu end-->
+        </div>
+    </aside>
+    <!--sidebar end-->
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper site-min-height">
+            <!-- page start-->
+            <section class="panel">
+                <header class="panel-heading">
+                    商品信息列表
+                    2018 再见！2019 你好！
+                </header>
+                <div class="panel-body">
+                    <div class="adv-table editable-table ">
+                        <div class="space15"></div>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-bordered" id="editable-sample">
+                                <form action="/product/addproduct" method="post" id="addproductForm" class="form-inline" enctype="multipart/form-data">
+                                    <input type="hidden" name="flag" value="2">
+                                    <thead>
+                                    <tr>
+                                        <th><i class="fa fa-question-circle"></i> 商品种类</th>
+                                        <td>
+                                            <div >
+                                                <select name="categoryId" class="form-control" required>
+                                                    <option value="0">请选择商品类型</option>
+                                                    <div th:each="category:${categoryList}">
+                                                        <option th:value="${category.categoryId}" th:text="${category.name}"></option>
+                                                    </div>
+                                                </select>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><i class="fa fa-bookmark"></i> 商品名称</th>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="productName"
+                                                       name="productName" placeholder="商品名称" required>
+                                            </div>
+                                        </td>
+                                        <td><div id="productNameTip" style="width:300px"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <th><i class="fa fa-bookmark"></i>图片</th>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="file" class="form-control" id = "file" name="file"  required>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><i class=" fa fa-bookmark"></i> 单价（正数）</th>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="price"
+                                                       name="price" placeholder="单价" pattern="[1-9]\d*.\d*|0\.\d*[1-9]\d*" required>
+                                            </div>
+                                        </td>
+                                        <td><div id="priceTip" style="width:300px"></div></td>
+
+                                    </tr>
+                                    <tr>
+                                        <th><i class="fa fa-bookmark"></i>库存量(正整数)</th>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="count"
+                                                       name="count" placeholder="库存量" pattern="[1-9]\d*" required>
+                                            </div>
+                                        </td>
+                                        <td><div id="countTip" style="width:300px"></div></td>
+
+                                    </tr>
+                                    <tr>
+                                        <th><i class="fa fa-bookmark"></i>生产厂家</th>
+
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="factory"
+                                                       name="factory" placeholder="生产厂家" required>
+                                            </div>
+                                        </td>
+                                        <td><div id="factoryTip" style="width:300px"></div></td>
+
+                                    </tr>
+                                    <tr>
+                                        <th><i class="fa fa-question-circle"></i>上下架状态</th>
+                                        <td>
+                                            <div class="form-group">
+                                                <select name="status" class="form-control" >
+                                                    <option value="1">上架</option>
+                                                    <option value="0">下架</option>
+                                                </select>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <th><i class="fa fa-bookmark"></i>备注</th>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="remarks"
+                                                       name="remarks" placeholder="你想说点什么" required>
+                                            </div>
+                                        </td>
+                                        <td><div id="remarksTip" style="width:300px"></div></td>
+
+                                    </tr>
+                                    <tr>
+                                        <th><i class="fa fa-bookmark-o">操作</i> </th>
+                                        <td>
+                                            <input type="submit" class="btn btn-success" ></input>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <button type="reset"  class="btn btn-danger"><a href="/product/list">取消</a></button>
+                                        </td>
+
+                                    </tr>
+                                    </thead>
+                                    <!-- 商品有效性默认为1-->
+                                    <input type="hidden" id="isEffective" name="isEffective" value="1">
+                                    <!-- 商品销量默认为0-->
+                                    <input type="hidden" id="sales" name="sales" value="0">
+
+                                </form>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </section>
+    <!--main content end-->
+
+    <!--footer start-->
+    <footer class="site-footer">
+        <div class="text-center">
+            XIAO MI  小米网上商城
+            <a href="#" class="go-top">
+                <i class="fa fa-angle-up"></i>
+            </a>
+        </div>
+    </footer>
+    <!--footer end-->
+</section>
+
+<!-- js placed at the end of the document so the pages load faster -->
+<script src="../admins/js/jquery.js"></script>
+<script src="../admins/js/bootstrap.min.js"></script>
+<script class="include" type="text/javascript" src="../admins/js/jquery.dcjqaccordion.2.7.js"></script>
+<script src="../admins/js/jquery.scrollTo.min.js"></script>
+<script src="../admins/js/jquery.nicescroll.js" type="text/javascript"></script>
+<script src="../admins/js/jquery.sparkline.js" type="text/javascript"></script>
+<script src="../admins/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js"></script>
+<script src="../admins/js/owl.carousel.js" ></script>
+<script src="../admins/js/jquery.customSelect.min.js" ></script>
+<script src="../admins/js/respond.min.js" ></script>
+
+<script src="../admins/js/jquery-ui-1.9.2.custom.min.js"></script>
+
+<script src="../admins/js/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="../admins/assets/data-tables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="../admins/assets/data-tables/DT_bootstrap.js"></script>
+<!--right slidebar-->
+<script src="../admins/js/slidebars.min.js"></script>
+
+<!--common script for all pages-->
+<script src="../admins/js/common-scripts.js"></script>
+
+<!--script for this page-->
+<script src="../admins/js/sparkline-chart.js"></script>
+<script src="../admins/js/easy-pie-chart.js"></script>
+<script src="../admins/js/count.js"></script>
+<!--script for this page only-->
+<script src="../admins/js/editable-table.js"></script>
+<script type="text/javascript">
+    $("#addproductForm").submit(function () {
+        var productname=document.getElementById("productName");
+        productname.addEventListener("input", function (event) {
+            if (productname.validity.typeMismatch) {
+                productname.setCustomValidity("请输入商品名");
+            } else {
+                productname.setCustomValidity("");
+            }
+        });
+    })
+</script>
+
+</body>
+</html>

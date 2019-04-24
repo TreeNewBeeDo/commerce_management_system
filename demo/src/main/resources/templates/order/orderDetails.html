@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:margin-right="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>订单详情页面</title>
+    <link href="../users/jQueryGwc/css/public.css" type="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="../users/jQueryGwc/css/base.css"/>
+   <link rel="stylesheet" type="text/css" href="../users/jQueryGwc/css/checkOut.css" />
+
+    <link rel="stylesheet" type="text/css" href="../users/css/style.css">
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<header>
+    <div class="top center">
+        <div class="left fl">
+            <ul>
+                <li><a href="/" >小米商城</a></li>
+
+                <div class="clear"></div>
+            </ul>
+        </div>
+        <div class="right fr">
+            <div class="gouwuche fr"><a th:href="@{/cart/list}" target="_blank">购物车</a></div>
+            <div class="fr">
+                <ul sec:authorize="isAnonymous()">
+                    <li><a th:href="@{/login}" target="_blank">登录</a></li>
+                    <li>|</li>
+                    <li><a th:href="@{/toRegister}" target="_blank" >注册</a></li>
+                </ul>
+                <ul sec:authorize="isAuthenticated()">
+                    <li><a th:text="${user.name}">name</a> </li>
+                    <li>|</li>
+                    <li><a href="/user/user">个人中心</a></li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')">|</li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a th:href="@{/adminIndex}">管理后台</a>
+                    </li>
+                    <li>|</li>
+                    <li>
+                        <a href="/logout">退出登录</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</header>
+
+<!-- 顶部分类及搜索框 start banner_x -->
+<div class="banner_x center">
+    <a href="/" target="_blank"><div class="logo fl"></div></a>
+    <!--<a ><div class="ad_top fl"></div></a>-->
+    <div class="nav fl">
+        <ul >
+            <li><a th:href="@{'/product/allProduct?orderbyname=sales'}">全部商品</a></li>
+        </ul>
+    </div>
+    <div class="nav fl">
+        <ul >
+            <li th:each="category:${categoryList}">
+                <a th:href="@{'/product/findKindProduct?kind='+${category.categoryId}+'&orderbyname=sales'}" th:text="${category.name}">全部商品类型</a>
+            </li>
+        </ul>
+    </div>
+    <div class="search fr">
+        <form action="/product/findProduct" method="post">
+            <div class="text fl">
+                <input  type="text" class="shuru" name="name" placeholder="请输入商品名">
+            </div>
+            <div class="submit fl">
+                <input type="submit" class="sousuo" value="搜索"/>
+            </div>
+            <div class="clear"></div>
+        </form>
+        <div class="clear"></div>
+    </div>
+</div>
+<!-- end banner_x -->
+
+<form >
+
+    <div class="checkout-box-ft">
+        <!-- 商品清单 -->
+        <div id="checkoutGoodsList" class="checkout-goods-box">
+            <div class="xm-box">
+                <div class="box-hd">
+                    <h2 class="title">订单信息</h2>
+                </div>
+                <div class="box-bd">
+                    <dl class="checkout-goods-list">
+                        <dt class="clearfix">
+                            <!--<span class="col col-1">图片</span>-->
+                            <span class="col col-1">商品名称</span>
+                            <span class="col col-2">购买价格</span>
+                            <span class="col col-3">购买数量</span>
+                            <span class="col col-4">小计（元）</span>
+                        </dt>
+
+                        <dd class="item clearfix" th:each="productOrderItem:${productOrderItems}">
+                            <div class="item-row">
+                                <div class="col col-1">
+                                    <div class="g-pic">
+                                        <img th:src="'../update/product/'+${productOrderItem.image}"  width="40" height="40" />
+                                    </div>
+                                    <div class="g-info" th:text="${productOrderItem.productName}">
+                                        小米T恤
+                                    </div>
+                                </div>
+                                <div class="col col-2" th:text="${productOrderItem.price}"></div>
+                                <div class="col col-3" ><input style="border:none;" name="numbers"   th:value="${productOrderItem.number}"/></div>
+                                <div class="col col-4"   th:text="${productOrderItem.getTotalPrice()}"  >12</div>
+
+                                <input name="cartIds"  type="hidden" th:value="${productOrderItem.cartId}"/>
+                                <input name="productIds"  type="hidden" th:value="${productOrderItem.productId}"/>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+   <div>订单号：<input style="border: none ;width: 300px;" readonly="readonly" th:type="text" th:value="${order.orderId}"/></div>
+   <div>总价：  <input  style="border: none" readonly="readonly"th:type="text" th:value="${order.totalPrice}"/>元</div>
+    <div style="margin-left: auto;
+         margin-right: auto;">
+        <ul class="list-group" >
+
+            <li>收货人：<span th:text="${order.receiver}"></span></li>
+            <li>联系方式：<span th:text="${order.receivePhone}"></span></li>
+            <li>地址：<span th:text="${order.receiveAddress}"></span></li>
+        </ul>
+    </div>
+
+    <div th:if="${flag}==4" >
+      <li> 退货理由  <input class="list-group-item"  style="border: none" readonly="readonly" th:value="${order.returnReason}"/></li>
+    </div>
+    <div th:if="${flag}==5" >
+        退货理由  <input class="list-group-item"  style="border: none" readonly="readonly" th:value="${order.returnReason}"/>
+    </div>
+
+<div th:if="${flag}==2">
+    <a th:href="@{/order/confirmOrder(orderId=${order.orderId})}"  >确认收货</a>
+</div>
+    <div th:if="${flag} ne 4">
+        <div th:if="${flag} ne 5 ">
+            <div th:if="${flag} eq 2">
+                <a th:href="@{/order/applyReturn(orderId=${order.orderId})}"  >申请退货</a>
+            </div>
+        </div>
+    </div>
+
+
+</form>
+
+<footer class="mt20 center" >
+    <hr/>
+    <div>小米商城-CDIO-第一组</div>
+</footer>
+</body>
+</html>

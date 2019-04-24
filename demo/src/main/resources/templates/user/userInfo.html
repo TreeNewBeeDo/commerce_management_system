@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="order by dede58.com"/>
+    <title>小米商城-个人中心</title>
+    <link rel="stylesheet" type="text/css" href="../../static/users/css/style.css"
+          th:href="@{/users/css/style.css}">
+
+</head>
+<body>
+<!-- start header -->
+<header>
+    <div class="top center">
+        <div class="left fl">
+            <ul>
+                <li><a href="/" >小米商城</a></li>
+
+                <div class="clear"></div>
+            </ul>
+        </div>
+        <div class="right fr">
+            <div class="gouwuche fr"><a th:href="@{/cart/list}" target="_blank">购物车</a></div>
+            <div class="fr">
+                <ul sec:authorize="isAnonymous()">
+                    <li><a th:href="@{/login}" target="_blank">登录</a></li>
+                    <li>|</li>
+                    <li><a th:href="@{/toRegister}" target="_blank" >注册</a></li>
+                </ul>
+                <ul sec:authorize="isAuthenticated()">
+                    <li><a th:text="${user.name}">name</a> </li>
+                    <li>|</li>
+                    <li><a href="/user/user">个人中心</a></li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')">|</li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a th:href="@{/adminIndex}">管理后台</a>
+                    </li>
+                    <li>|</li>
+                    <li>
+                        <a href="/logout">退出登录</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</header>
+<!--end header -->
+<!-- 顶部分类及搜索框 start banner_x -->
+<div class="banner_x center">
+    <a href="/" target="_blank"><div class="logo fl"></div></a>
+    <!--<a ><div class="ad_top fl"></div></a>-->
+    <div class="nav fl">
+        <ul >
+            <li><a th:href="@{'/product/allProduct?orderbyname=sales'}">全部商品</a></li>
+        </ul>
+    </div>
+    <div class="nav fl">
+        <ul >
+            <li th:each="category:${categoryList}">
+                <a th:href="@{'/product/findKindProduct?kind='+${category.categoryId}+'&orderbyname=sales'}" th:text="${category.name}">全部商品类型</a>
+            </li>
+        </ul>
+    </div>
+    <div class="search fr">
+        <form action="/product/findProduct" method="post">
+            <div class="text fl">
+                <input  type="text" class="shuru" name="name" placeholder="请输入商品名">
+            </div>
+            <div class="submit fl">
+                <input type="submit" class="sousuo" value="搜索"/>
+            </div>
+            <div class="clear"></div>
+        </form>
+        <div class="clear"></div>
+    </div>
+</div>
+<!-- end banner_x -->
+<!-- self_info -->
+<div class="grzxbj">
+    <div class="selfinfo center">
+        <div class="lfnav fl">
+            <div class="ddzx">订单中心</div>
+            <div class="subddzx">
+                <ul>
+                    <li><a href="/order/orderCenter">我的订单</a></li>
+                </ul>
+            </div>
+            <div class="ddzx">个人中心</div>
+            <div class="subddzx">
+                <ul>
+                    <li><a href="/user/user" style="color:#ff6700;font-weight:bold;">我的个人中心</a></li>
+                    <li><a href="/user/userEdit">修改个人资料</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="rtcont fr">
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <div class="grzlbt ml40">头像</div>
+            <div>
+                <img th:src="'../update/portrait/'+${user.portraitUrl}" width="100px", hight="100px">
+                <form action="/user/updateImage0" id="Picture" method="post"  enctype="multipart/form-data">
+                    <input type="file" id="file" name="file" value="更换图片">
+                    <button class="btn btn-success " onclick="pictureSubmit()" >提交</button>
+                </form>
+            </div>
+            <div class="grzlbt ml40"><a href="/user/user">我的资料</a></div>
+            <div class="subgrzl ml40"><span>用户名</span><span th:text="${user.username}">啦啦维吉尔</span><span><a >--</a></span></div>
+            <div class="subgrzl ml40"><span>姓名</span><span th:text="${user.name}">15669097417</span><span><a >--</a></span></div>
+            <div class="subgrzl ml40"><span>生日</span><span th:text="${ds.format(user.birth)}">************</span><span><a >--</a></span></div>
+            <div class="subgrzl ml40"><span>邮箱</span><span th:text="${user.email}">一支穿云箭，千军万马来相见！</span><span><a >--</a></span></div>
+            <div class="subgrzl ml40"><span>手机号</span><span th:text="${user.phone}">游戏，音乐，旅游，健身</span><span><a >--</a></span></div>
+            <div class="subgrzl ml40"><span>性别</span>
+                <span th:switch="${user.sex}">
+                    <a th:case="1">男</a>
+                    <a th:case="2">女</a>
+                    <a th:case="3">保密</a>
+                 </span><span><a >--</a></span></div>
+            <div class="subgrzl ml40"><span>地址</span><span th:text="${user.address}">浙江省杭州市江干区19号大街571号</span><span><a >--</a></span></div>
+            <div class="subgrzl ml40"><span>邮编</span><span th:text="${user.postcode}">浙江省杭州市江干区19号大街571号</span><span><a >--</a></span></div>
+            <div class="subgrzl ml40"><span>注册时间</span><span th:text="${ds.format(user.registerTime)}">浙江省杭州市江干区19号大街571号</span><span><a >--</a></span></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<!-- self_info -->
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<footer class="mt20 center" >
+    <hr/>
+    <div>小米商城-CDIO-第一组</div>
+</footer>
+</body>
+</html>

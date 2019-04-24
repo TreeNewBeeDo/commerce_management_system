@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="order by dede58.com"/>
+    <title>小米商城-个人中心</title>
+    <link rel="stylesheet" type="text/css" href="../../static/users/css/style.css"
+          th:href="@{/users/css/style.css}">
+    <script src="../admins/js/jquery.js"></script>
+</head>
+<body>
+<!-- start header -->
+<header>
+    <div class="top center">
+        <div class="left fl">
+            <ul>
+                <li><a href="/" >小米商城</a></li>
+
+                <div class="clear"></div>
+            </ul>
+        </div>
+        <div class="right fr">
+            <div class="gouwuche fr"><a th:href="@{/cart/list}" target="_blank">购物车</a></div>
+            <div class="fr">
+                <ul sec:authorize="isAnonymous()">
+                    <li><a th:href="@{/login}" target="_blank">登录</a></li>
+                    <li>|</li>
+                    <li><a th:href="@{/toRegister}" target="_blank" >注册</a></li>
+                </ul>
+                <ul sec:authorize="isAuthenticated()">
+                    <li><a th:text="${user.name}">name</a> </li>
+                    <li>|</li>
+                    <li><a href="/user/user">个人中心</a></li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')">|</li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a th:href="@{/adminIndex}">管理后台</a>
+                    </li>
+                    <li>|</li>
+                    <li>
+                        <a href="/logout">退出登录</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</header>
+<!--end header -->
+<!-- 顶部分类及搜索框 start banner_x -->
+<div class="banner_x center">
+    <a href="/" target="_blank"><div class="logo fl"></div></a>
+    <!--<a href=""><div class="ad_top fl"></div></a>-->
+    <div class="nav fl">
+        <ul >
+            <li><a th:href="@{'/product/allProduct?orderbyname=sales'}">全部商品</a></li>
+        </ul>
+    </div>
+    <div class="nav fl">
+        <ul >
+            <li th:each="category:${categoryList}">
+                <a th:href="@{'/product/findKindProduct?kind='+${category.categoryId}+'&orderbyname=sales'}" th:text="${category.name}">全部商品类型</a>
+            </li>
+        </ul>
+    </div>
+    <div class="search fr">
+        <form action="/product/findProduct" method="post">
+            <div class="text fl">
+                <input  type="text" class="shuru" name="name" placeholder="请输入商品名">
+            </div>
+            <div class="submit fl">
+                <input type="submit" class="sousuo" value="搜索"/>
+            </div>
+            <div class="clear"></div>
+        </form>
+        <div class="clear"></div>
+    </div>
+</div>
+<!-- end banner_x -->
+<!-- self_info -->
+<div class="grzxbj">
+    <div class="selfinfo center">
+        <div class="lfnav fl">
+            <div class="ddzx">订单中心</div>
+            <div class="subddzx">
+                <ul>
+                    <li><a href="/order/orderCenter">我的订单</a></li>
+                </ul>
+            </div>
+            <div class="ddzx">个人中心</div>
+            <div class="subddzx">
+                <ul>
+                    <li><a href="/user/user">我的个人中心</a></li>
+                    <li><a href="/user/userEdit" style="color:#ff6700;font-weight:bold;">修改个人资料</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="rtcont fr">
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <div class="grzlbt ml40">头像</div>
+            <div>
+                <img th:src="'../update/portrait/'+${user.portraitUrl}" width="100px", hight="100px">
+            </div>
+            <div class="grzlbt ml40"><a href="/user/user">我的资料</a></div>
+            <form th:action="@{/user/updateUsers}" th:method="post" id="formBase" class="form-horizontal" role="form">
+                <input type="hidden" name="userId" th:value="${user.userId}">
+                <div class="subgrzl ml40"><span>姓名</span><span><input type="text" name="name" th:value="${user.name}" class="form-control" maxlength="30" required>
+                                    </span><span><a href="">--</a></span></div>
+                <div class="subgrzl ml40"><span>生日</span><span><input type="date" name="birth" th:value="${ds.format(user.birth)}" required></span><span><a href="">--</a></span></div>
+                <div class="subgrzl ml40"><span>邮箱</span><span><input type="email" name="email" th:value="${user.email}" class="form-control"  required>
+                                    </span><span><a href="">--</a></span></div>
+                <div class="subgrzl ml40"><span>手机号</span><span><input type="tel" name="phone" th:value="${user.phone}" class="form-control" maxlength="11" minlength="0">
+                                    </span><span><a href="">--</a></span></div>
+                <div class="subgrzl ml40"><span>性别</span><span><select name="sex">
+                                            <option th:switch="${user.sex}" th:value="${user.sex}">
+                                                <a th:case="1">男</a>
+                                                <a th:case="2">女</a>
+                                                <a th:case="3">保密</a>
+                                            </option>
+                                            <option value="1">男</option>
+                                            <option value="2">女</option>
+                                            <option value="3">保密</option>
+                                        </select></span><span><a href="">--</a></span></div>
+                <div class="subgrzl ml40"><span>地址</span><span><input type="text" name="address" th:value="${user.address}" class="form-control" placeholder=" ">
+                                    </span><span><a href="">--</a></span></div>
+                <div class="subgrzl ml40"><span>邮编</span><span><input type="text" name="postcode" th:value="${user.postcode}" class="form-control" placeholder="">
+                                    </span><span><a href="">--</a></span></div>
+                <input type="submit" value="提交">
+            </form>
+            <hr/>
+            <hr/>
+            <div class="grzlbt ml40">修改密码</div>
+            <form th:action="@{/user/changePassword}" th:method="post" class="form-horizontal" role="form" id="form2">
+                <input type="hidden" name="userId" th:value="${user.userId}">
+                <div class="subgrzl ml40"><span>原密码</span><span><input type="password" id="old_password" name="password" required></span> <span id="old_password_span">&nbsp;</span></div>
+                <div class="subgrzl ml40"><span>新密码</span><span><input type="password" id="newPassword" maxlength="20" minlength="6" name="newPassword" required></span></div>
+                <div class="subgrzl ml40"><span>再次输入</span><span><input type="password" id="reNewPassword" maxlength="20" minlength="6" name="reNewPassword" required></span> <span id="reNewPassword_span">&nbsp;</span></div>
+                <input type="submit" value="提交">
+            </form>
+
+        </div>
+
+
+        <div class="clear"></div>
+    </div>
+</div>
+<!-- self_info -->
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+<footer class="mt20 center" >
+    <hr/>
+    <div>小米商城-CDIO-第一组</div>
+</footer>
+
+<script>
+    $("#old_password").change(function () {
+        var oldPassword=$("#old_password").val();
+        $.ajax({
+            url:"/user/checkOldPassword",
+            type:"POST",
+            data:$(this).parents("form").serialize(),
+            success:function (result) {
+                if(result.code==0){
+                    $("#old_password_span").attr("style","color:red;");
+                    $("#old_password_span").text(result.extend.checkResult);
+                    $("#form2").attr("flag1",0);
+                }else{
+                    $("#old_password_span").attr("style","");
+                    $("#old_password_span").text("√");
+                    $("#form2").attr("flag1",1);
+                }
+            }
+        });
+    });
+    $("#reNewPassword").change(function () {
+        var newPassword=$("#newPassword").val();
+        var reNewPassword=$("#reNewPassword").val();
+        if(newPassword!=reNewPassword){
+            $("#form2").attr("flag2",0);
+            $("#reNewPassword_span").text("两次密码不一致");
+        }else {
+            $("#form2").attr("flag2",1);
+            $("#reNewPassword_span").text("√");
+        }
+    });
+
+    $("#form2").submit(function () {
+        if($(this).attr("flag1")==1&&$(this).attr("flag2")==1){
+            return true;
+        }else
+            return false;
+    });
+</script>
+</body>
+</html>

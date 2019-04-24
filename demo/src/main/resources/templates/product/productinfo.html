@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+		<meta charset="UTF-8">
+        <meta name="author" content="order by dede58.com"/>
+		<title th:text="${productInfo.productName}+'详情'"></title>
+		<link rel="stylesheet" type="text/css" href="../../static/users/css/style.css"
+			  th:href="@{/users/css/style.css}">
+		<script src="../admins/js/jquery.js"></script>
+</head>
+<body>
+<header>
+	<div class="top center">
+		<div class="left fl">
+			<ul>
+				<li><a href="/" >小米商城</a></li>
+
+				<div class="clear"></div>
+			</ul>
+		</div>
+		<div class="right fr">
+			<div class="gouwuche fr"><a th:href="@{/cart/list}" target="_blank">购物车</a></div>
+			<div class="fr">
+				<ul sec:authorize="isAnonymous()">
+					<li><a th:href="@{/login}" target="_blank">登录</a></li>
+					<li>|</li>
+					<li><a th:href="@{/toRegister}" target="_blank" >注册</a></li>
+				</ul>
+				<ul sec:authorize="isAuthenticated()">
+					<li><a th:text="${user.name}">name</a> </li>
+					<li>|</li>
+					<li><a href="/user/user">个人中心</a></li>
+					<li>|</li>
+					<li>
+						<a href="/logout">退出登录</a>
+					</li>
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+</header>
+	<!--类型列表-->
+<!-- 顶部分类及搜索框 start banner_x -->
+<div class="banner_x center">
+	<a href="/" target="_blank"><div class="logo fl"></div></a>
+	<!--<a href=""><div class="ad_top fl"></div></a>-->
+	<div class="nav fl">
+		<ul >
+			<li><a th:href="@{'/product/allProduct?orderbyname=sales'}">全部商品</a></li>
+		</ul>
+	</div>
+	<div class="nav fl">
+		<ul >
+			<li th:each="category:${categoryList}">
+				<a th:href="@{'/product/findKindProduct?kind='+${category.categoryId}+'&orderbyname=sales'}" th:text="${category.name}">全部商品类型</a>
+			</li>
+		</ul>
+	</div>
+	<div class="search fr">
+		<form action="/product/findProduct" method="post">
+			<div class="text fl">
+				<input  type="text" class="shuru" name="name" placeholder="请输入商品名">
+			</div>
+			<div class="submit fl">
+				<input type="submit" class="sousuo" value="搜索"/>
+			</div>
+			<div class="clear"></div>
+		</form>
+		<div class="clear"></div>
+	</div>
+</div>
+<!-- end banner_x -->
+<!-- 顶部页面结束-->
+
+	<input id="danjia" type="hidden" th:value="${productInfo.price}"/>
+	<input id="id" type="hidden" th:value="${productInfo.productId}"/>
+	<!-- xiangqing -->
+	<form action="post" method="">
+		<div class="jieshao mt20 w">
+			<div class="left fl"><img th:src="'../update/product/'+ ${productInfo.image}" width="560" height="560"></div>
+			<div class="right fr">
+				<div class="h3 ml20 mt20" th:text="${productInfo.productName}">名称</div>
+				<div class="xqxq1 ml20 mt20">
+					<div th:text="${productInfo.remarks}">描述</div>
+				</div>
+				<div class="xqxq2 ml20 mt20">
+					<div class="ft20  ftbc" th:text="${productInfo.price}">单价</div>
+					<div class="top1 mt10">
+						<div class="left1 fl">
+							<ul>
+								<li class="left1 fl"><input type="hidden" id="hidden_number" th:value="${productInfo.getCount()}"/></li>
+								<li class="left1 fl"><input type="text" id="vl" value="-" style="width: 10px;height: 30px;" onclick="numberdown()"/></li>
+								<li class="left1 fl"><input type="text" style="width: 40px;height: 30px;" id="num" value="1" readonly="readonly"/></li>
+								<li class="left1 fl"><input type="text" id="" value="+" style="width: 10px;height: 30px;" readonly="readonly" onclick="numberup()"/></li>
+							</ul>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="bot mt20 ft20 ftbc">总计:
+						<input id="zongji" disabled type="text" th:value="${productInfo.price}" style="border-style:none;font-size:25px;color: #ff6700;background-color:transparent" />
+					</div>
+					<div class="xiadan ml20 mt20">
+
+						<span sec:authorize="isAuthenticated()">
+							<span th:if="${user.isEffective} eq 1">
+								<input class="jrgwc" onclick="zhijiegoumai()"  type="button" value="立即选购" />
+							</span>
+						</span>
+						<span sec:authorize="isAnonymous()">
+							<input class="jrgwc" onclick="zhijiegoumai()"  type="button" value="立即选购" />
+						</span>
+
+						<span sec:authorize="isAuthenticated()">
+							<input class="jrgwc" onclick="gouwuche()" type="button"  value="加入购物车"  />
+						</span>
+						<!--<a th:href="@{'/cart/insert/'+${productInfo.productId}+'/'+${}"></a>-->
+					</div>
+				</div>
+			</div>
+
+		</div>
+			<div class="clear"></div>
+		</div>
+	</form>
+
+	<footer class="mt20 center" >
+		<hr/>
+		<div>小米商城-CDIO-第一组</div>
+	</footer>
+
+
+
+
+	<script>
+		function numberdown() {
+			var num = document.getElementById("num");		//获取商品数量
+            var danjia = document.getElementById("danjia");	//获取商品单价
+			if(num.value > 1){
+			    num.value = num.value*1-1;
+			}
+			else {
+			    alert("数量不能为0");
+			}
+            zongji.value= (num.value*1)*(danjia.value*1);
+        }
+        function numberup() {
+			var num = document.getElementById("num");		//获取商品数量
+            var danjia = document.getElementById("danjia");	//获取商品单价
+			num.value=num.value*1+1;
+            zongji.value= (num.value*1)*(danjia.value*1);
+
+        }
+		function zhijiegoumai() {
+			var ID = document.getElementById("id").value;						//商品ID
+			var price = document.getElementById("danjia").value;				//商品单价
+			var num = document.getElementById("num").value;					//商品
+		    if($("#hidden_number").val()<num) {
+		        alert("库存不足");
+			}else
+			location.href="/order/buyProduct?productId="+ID+"&num="+num;
+		}
+
+        function gouwuche() {
+            var ID = document.getElementById("id").value;						//商品ID
+           // var price = document.getElementById("danjia");				//商品单价
+            var num = document.getElementById("num").value;					//商品数量
+			alert("已成功添加购物车");
+            location.href="/cart/insert?productId="+ID+"&productCount="+num;
+
+        }
+
+
+	</script>
+	</body>
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <link rel="shortcut icon" href="../admins/img/favicon.png">
+
+    <title>XIAO MI</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../admins/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../admins/css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <link href="../admins/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!--right slidebar-->
+    <link href="../admins/css/slidebars.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="../admins/css/style.css" rel="stylesheet">
+    <link href="../admins/css/style-responsive.css" rel="stylesheet" />
+    <link href="../admins/css/invoice-print.css" rel="stylesheet" media="print">
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+    <!--[if lt IE 9]>
+    <script src="../admins/js/html5shiv.js"></script>
+    <script src="../admins/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<section id="container" class="">
+    <!--header start-->
+    <header class="header white-bg">
+        <div class="sidebar-toggle-box">
+            <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+        </div>
+        <!--logo start-->
+        <a th:href="@{/login-allot}" class="logo">XIAO<span>MI</span></a>
+
+        <a class="logo">
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            小米商城
+            <span>
+                管理平台
+            </span>
+        </a>
+
+        <!--logo end-->
+
+        <div class="top-nav ">
+            <!--search & user info start-->
+            <ul class="nav pull-right top-menu">
+                <!--<li>-->
+                <!--<input type="text" class="form-control search" placeholder="Search">-->
+                <!--</li>-->
+                <!-- user login dropdown start-->
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <img th:src="'../update/portrait/'+${user.portraitUrl}" width="30px", hight="30px">
+                        <span th:text="${user.name}" class="username" >Jhon Doue</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <div class="log-arrow-up"></div>
+                        <li><a th:href="@{'/user/'+${user.userId}}" href="#"><i class=" fa fa-suitcase"></i>个人资料</a></li>
+                        <li><a th:href="@{/}"><i class="fa fa-cog"></i> 网站首页</a></li>
+                        <!--<li><a href="#"><i class="fa fa-bell-o"></i> Notification</a></li>-->
+                        <li><a th:href="@{/logout}"><i class="fa fa-key"></i> 注销</a></li>
+                    </ul>
+                </li>
+                <li class="sb-toggle-right">
+                    <i class="fa  fa-align-right"></i>
+                </li>
+                <!-- user login dropdown end -->
+            </ul>
+            <!--search & user info end-->
+        </div>
+    </header>
+    <!--header end-->
+    <!--sidebar start-->
+    <aside>
+        <div id="sidebar"  class="nav-collapse ">
+            <!-- sidebar menu start-->
+            <ul class="sidebar-menu" id="nav-accordion">
+                <li>
+                    <a class="active" href="/adminIndex">
+                        <i class="fa fa-dashboard"></i>
+                        <span>仪表盘</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a th:href="@{'/user/'+${user.userId}}">
+                        <i class="fa fa-user"></i>
+                        <span>个人资料</span>
+                    </a>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;" >
+                        <i class="fa fa-book"></i>
+                        <span>用户管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a th:href="@{/user/list}">普通用户</a></li>
+                        <li><a th:href="@{/user/adminlist}" >管理员列表</a></li>
+                    </ul>
+                </li>
+
+                <li class="sub-menu">
+                    <a href="javascript:;" >
+                        <i class="fa fa-th"></i>
+                        <span>商品种类管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a  href="/category/list">种类信息</a></li>
+                        <li><a  href="/category/addcategory?flag=1">增加商品种类</a></li>
+                    </ul>
+                </li>
+
+                <li class="sub-menu">
+                    <a href="javascript:;" >
+                        <i class="fa fa-bar-chart-o"></i>
+                        <span>商品管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a  href="/product/list">商品列表</a></li>
+                        <li><a  href="/product/addproduct?flag=1">增加商品</a></li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;" >
+                        <i class="fa fa-tasks"></i>
+                        <span>订单管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="/adminOrder/newOrder">待发货</a></li>
+                        <li><a href="/adminOrder/shippedOrder">已发货</a></li>
+                        <li><a href="/adminOrder/completeOrder">确认收货</a></li>
+                        <li><a href="/adminOrder/askReturnOrder">请求退货</a></li>
+                        <li><a href="/adminOrder/returnedOrder">已退货</a></li>
+                        <li><a href="/adminOrder/seekOrder">查找订单</a></li>
+                    </ul>
+                </li>
+
+                <!--multi level menu end-->
+
+            </ul>
+            <!-- sidebar menu end-->
+        </div>
+    </aside>
+    <!--sidebar end-->
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <!--所在位置-->
+            <div class="row">
+                <div class="col-lg-12">
+                    <!--breadcrumbs start -->
+                    <ul class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+                        <li><a href="#">订单管理</a></li>
+                        <li class="active">已退货</li>
+                    </ul>
+                    <!--breadcrumbs end -->
+                </div>
+            </div>
+            <!-- invoice start-->
+
+            <!--订单列表-->
+            <!--一条订单-->
+
+            <table>
+                <tbody>
+                <tr>
+                    <td width="40"></td>
+                    <td width="100">图片</td>
+                    <td width="250">商品名</td>
+                    <td width="100">单价</td>
+                    <td width="50">数量</td>
+                    <td width="100">售后</td>
+                    <td width="100">买家</td>
+                    <td width="100">交易状况</td>
+                    <td width="100">实收款</td>
+                    <td width="50">操作</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div id="orders">
+
+                <table>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-md-6" id="page_info_area">
+
+                </div>
+
+                <div class="col-md-6" id="page_info_nav">
+
+                </div>
+            </div>
+            <!-- invoice end-->
+        </section>
+    </section>
+    <!--main content end-->
+    <!-- Right Slidebar start -->
+
+    <!-- Right Slidebar end -->
+    <!--footer start-->
+    <footer class="site-footer">
+        <div class="text-center">
+            XIAO MI  小米网上商城
+            <a href="#" class="go-top">
+                <i class="fa fa-angle-up"></i>
+            </a>
+        </div>
+    </footer>
+    <!--footer end-->
+</section>
+
+<!-- js placed at the end of the document so the pages load faster -->
+<script src="../admins/js/jquery.js"></script>
+<script src="../admins/js/bootstrap.min.js"></script>
+<script class="include" type="text/javascript" src="../admins/js/jquery.dcjqaccordion.2.7.js"></script>
+<script src="../admins/js/jquery.scrollTo.min.js"></script>
+<script src="../admins/js/jquery.nicescroll.js" type="text/javascript"></script>
+<script src="../admins/js/respond.min.js" ></script>
+
+<!--right slidebar-->
+<script src="../admins/js/slidebars.min.js"></script>
+
+<!--common script for all pages-->
+<script src="../admins/js/common-scripts.js"></script>
+
+<script>
+
+    //owl carousel
+    var currentPage;
+    //加载
+    $(function () {
+        toPage(1);
+    });
+
+    function toPage(pn) {
+
+        var selectType=$("#page_info_area").attr("select_Type");
+        //类型为模糊查询
+        if(selectType==1){
+            var queryContent=$("#queryContent").val();
+            $.ajax({
+                url:"${APP_PATH}/empsFuzzy"+"?date="+new Date().getTime(),
+                type:"GET",
+                data:"content="+queryContent+"&pn="+pn,
+                success:function (result) {
+                    console.log(result);
+
+                    build_emps_table(result);
+                    //建立分页信息
+                    build_page_info_area(result);
+                    //建立分页导航
+                    build_page_info_nav(result);
+                    //1为模糊查询
+                    $("#page_info_area").attr("select_Type","1");
+                }
+            });
+
+        }else {
+            $.ajax({
+                url: "/adminGetOrders/5",
+                type: "GET",
+                data: "pn=" + pn,
+                success: function (result) {
+                    console.log(result);
+                    build_orders_table(result);
+                    build_page_info_area(result);
+                    //建立分页导航
+                    build_page_info_nav(result);
+                }
+            });
+        }
+    }
+
+    function build_orders_table(result) {
+        $("#orders").empty();
+        var orders=result.extend.pageInfo.list;
+        $.each(orders,function (index,item) {
+            var tableOrder1=$("<table></table>").addClass("table");
+            var tbodyOrder1=$("<tbody></tbody>").appendTo(tableOrder1);
+            var trOrder1=$("<tr></tr>").appendTo(tbodyOrder1);
+            var tdOrderId1=$("<td bgcolor='silver' width='700'></td>").append("订单号："+item.orderId).appendTo(trOrder1);
+            var tdOrderTime1=$("<td bgcolor='silver'></td>").append("创建时间："+getMyDate(item.orderTime)).appendTo(trOrder1);
+            $("#orders").append(tableOrder1);
+
+            var tableOrder2=$("<table></table>");
+            var tbodyOrder2=$("<tbody></tbody>").appendTo(tableOrder2);
+            var trOrder2=$("<tr> <td width=\"40\"></td>" +
+                "<td width=\"100\"></td>" +
+                "<td width=\"250\"></td>" +
+                "<td width=\"100\"></td>" +
+                "<td width=\"50\"></td>" +
+                "<td width=\"100\"></td></tr>>").appendTo(tbodyOrder2);
+            var tdOrderUser=$("<td width='100'></td>").attr("id","a"+item.userId+index).appendTo(trOrder2);
+            // alert("a"+item.userId+index);
+            adminGetUserInfo(item.userId,index);
+            var i=index;
+            if(item.status==5) {
+                var tdOrderStatus = $("<td width='100'></td>").append("已退货").appendTo(trOrder2);
+            }
+            var tdOrderTotalPrice=$("<td width='100'>￥</td>").append(item.totalPrice).appendTo(trOrder2);
+            $("#orders").append(tableOrder2);
+
+            $.each(item.orderItemList,function (index,item) {
+                var tableOrder3=$("<table></table>");
+                var tbodyOrder3=$("<tbody></tbody>").appendTo(tableOrder3);
+                var trOrder3=$("<tr><td width=\"40\"></td></tr>").appendTo(tbodyOrder3);
+                var tdPhoto=$("<td width=\"100\"></td>").attr("id","photo"+item.productId+index+i).appendTo(trOrder3);
+                var tdProductName=$("<td width=\"250\"></td>").attr("id","name"+item.productId+index+i).appendTo(trOrder3);
+                adminGetProductInfo(item.productId,index,i);
+                var tdPerPrice=$("<td width=\"100\">￥</td>").append(item.perPrice).appendTo(trOrder3);
+                var tdNum=$("<td width=\"50\"></td>").append(item.number).appendTo(trOrder3);
+                $("#orders").append(tableOrder3).append("</br></br></br>");
+
+            });
+
+            //退货原因
+            var tableOrder5=$("<table></table>").addClass();
+            var tbodyOrder5=$("<tbody></tbody>").appendTo(tableOrder5);
+            var trOrder5=$("<tr></tr>").appendTo(tbodyOrder5);
+            if(null==item.returnReason) {
+                var tdReturnReason = $("<td></td>").append("&nbsp;&nbsp;退货原因：无").appendTo(trOrder5);
+            }else{
+                var tdReturnReason = $("<td></td>").append("&nbsp;&nbsp;退货原因：" + item.returnReason).appendTo(trOrder5);
+
+            }
+            $("#orders").append(tableOrder5).append("</br></br>");
+
+            var tableOrder4=$("<table></table>").addClass("table");
+            var tbodyOrder4=$("<tbody></tbody>").appendTo(tableOrder4);
+            var trOrder4=$("<tr></tr>").appendTo(tbodyOrder4);
+            var tdOrderReceiver=$("<td bgcolor='silver'></td>").append("收货人："+item.receiver).appendTo(trOrder4);
+            var tdOrderReceivePhone=$("<td bgcolor='silver'></td>").append("手机号："+item.receivePhone).appendTo(trOrder4);
+            var tdOrderreceiveAddress=$("<td bgcolor='silver'></td>").append("收货地址："+item.receiveAddress).appendTo(trOrder4);
+            $("#orders").append(tableOrder4).append("</br></br>");
+        });
+    }
+    function build_page_info_area(result){
+        //先清空防止数据叠加显示
+        $("#page_info_area").empty();
+        $("#page_info_area").append("当前第 "+result.extend.pageInfo.pageNum+" 页， 共 "+result.extend.pageInfo.pages+" 页，共 "+result.extend.pageInfo.total+" 条信息");
+        currentPage=result.extend.pageInfo.pageNum;
+    }
+
+    function build_page_info_nav(result){
+        //先清空防止数据叠加显示
+        $("#page_info_nav").empty();
+        var ul=$("<ul></ul>").addClass("pagination");
+        var firstPageLi=$("<li></li>").append($("<a></a>").append("首页").attr("href","#"));
+
+        var prePageLi = $("<li></li>").append($("<a></a>").append("上一页").attr("href", "#"));
+
+
+        var nextPageLi=$("<li></li>").append($("<a></a>").append("下一页").attr("href","#"));
+        var lastPageLi=$("<li></li>").append($("<a></a>").append("尾页").attr("href","#"));
+
+        firstPageLi.click(function () {
+            toPage(1);
+        });
+        lastPageLi.click(function () {
+            toPage(999);
+        });
+        prePageLi.click(function () {
+            toPage(currentPage-1);
+        });
+        nextPageLi.click(function () {
+            toPage(currentPage+1);
+        });
+        ul.append(firstPageLi);
+        if(currentPage!=1){
+            ul.append(prePageLi);
+        }
+
+        $.each(result.extend.pageInfo.navigatepageNums,function (index,item) {
+            var numLi=$("<li></li>").append($("<a></a>").append(item).attr("href","#"));
+            if(result.extend.pageInfo.pageNum==item) {
+                numLi.addClass("active");
+            }
+            ul.append(numLi);
+            numLi.click(function () {
+                toPage(item);
+            });
+        });
+
+        if(currentPage!=result.extend.pageInfo.pages){
+            ul.append(nextPageLi);
+        }
+        ul.append(lastPageLi);
+        var nav=$("<nav></nav>").append(ul);
+        nav.appendTo("#page_info_nav");
+    }
+
+    function getMyDate(str){
+        var oDate = new Date(str),
+            oYear = oDate.getFullYear(),
+            oMonth = oDate.getMonth()+1,
+            oDay = oDate.getDate(),
+            oHour = oDate.getHours(),
+            oMin = oDate.getMinutes(),
+            oSen = oDate.getSeconds(),
+            oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);//最后拼接时间
+        return oTime;
+    };
+    //补0操作
+    function getzf(num){
+        if(parseInt(num) < 10){
+            num = '0'+num;
+        }
+        return num;
+    }
+    //获得商品信息
+    function adminGetProductInfo(productId,index,i) {
+        $.ajax({
+            url: "/adminGetProductInfo",
+            type: "GET",
+            data: "productId="+productId,
+            success: function (result) {
+                console.log(result);
+                $("#name"+productId+index+i).append(result.extend.productName);
+                $("#photo"+productId+index+i).append("<img style='width: 60px; height: 60px;' src='../update/product/"+result.extend.productImage+"'>");
+            }
+
+        });
+    }
+
+    //获得买家信息
+    function adminGetUserInfo(userId,index) {
+        var userName;
+        $.ajax({
+            url: "/adminGetUserInfo",
+            type: "GET",
+            data: "userId="+userId,
+            success: function (result) {
+                console.log(result);
+                $("#a"+userId+index).append(result.extend.userName);
+            }
+
+        });
+
+    }
+
+
+
+
+</script>
+
+</body>
+</html>

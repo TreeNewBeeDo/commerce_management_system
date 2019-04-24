@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+		<meta charset="UTF-8">
+        <meta name="author" content="order by dede58.com"/>
+		<title>小米手机列表</title>
+		<link rel="stylesheet" type="text/css" href="../../static/users/css/style.css"
+		th:href="@{/users/css/style.css}">
+
+</head>
+	<body>
+		<header>
+			<div class="top center">
+				<div class="left fl">
+					<ul>
+						<li><a href="/" >小米商城</a></li>
+
+						<div class="clear"></div>
+					</ul>
+				</div>
+				<div class="right fr">
+					<div class="gouwuche fr"><a th:href="@{/cart/list}" target="_blank">购物车</a></div>
+					<div class="fr">
+						<ul sec:authorize="isAnonymous()">
+							<li><a th:href="@{/login}" target="_blank">登录</a></li>
+							<li>|</li>
+							<li><a th:href="@{/toRegister}" target="_blank" >注册</a></li>
+						</ul>
+						<ul sec:authorize="isAuthenticated()">
+							<li><a th:text="${user.name}">name</a> </li>
+							<li>|</li>
+							<li><a href="/user/user">个人中心</a></li>
+							<li sec:authorize="hasRole('ROLE_ADMIN')">|</li>
+							<li sec:authorize="hasRole('ROLE_ADMIN')">
+								<a th:href="@{/adminIndex}">管理后台</a>
+							</li>
+							<li>|</li>
+							<li>
+								<a href="/logout">退出登录</a>
+							</li>
+						</ul>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</header>
+		<!-- 顶部分类及搜索框 start banner_x -->
+		<div class="banner_x center">
+			<a href="/" target="_blank"><div class="logo fl"></div></a>
+			<!--<a href=""><div class="ad_top fl"></div></a>-->
+			<div class="nav fl">
+				<ul >
+					<li><a th:href="@{'/product/allProduct?orderbyname=sales'}">全部商品</a></li>
+				</ul>
+			</div>
+			<div class="nav fl">
+				<ul >
+					<li th:each="category:${categoryList}">
+						<a th:href="@{'/product/findKindProduct?kind='+${category.categoryId}+'&orderbyname=sales'}" th:text="${category.name}">全部商品类型</a>
+					</li>
+				</ul>
+			</div>
+			<div class="search fr">
+				<form action="/product/findProduct" method="post">
+					<div class="text fl">
+						<input  type="text" class="shuru" name="name" placeholder="请输入商品名">
+					</div>
+					<div class="submit fl">
+						<input type="submit" class="sousuo" value="搜索"/>
+					</div>
+					<div class="clear"></div>
+				</form>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<!-- end banner_x -->
+
+<!--页面顶部结束-->
+
+
+
+<!--排序按钮部分-->
+		<div class="danpin center" >
+
+			<div class="biaoti center" th:if="${isHidden}">
+				<input id="selectType" type="hidden" th:value="${selectType}" value="">
+				<input id="kind" type="hidden" th:value="${kind}" value="">
+				<!--全部分类时：kind=null；-->
+					<div th:if="${kind} eq null">
+                    <select id="selectId1" onchange="window.location.href='/product/findKindProduct?kind=-1&orderbyname='+this.value">
+                        <option  value="sales">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按销量排序
+                        </option>
+						<option value="price">
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按价格排序
+						</option>
+                        <option value="date" >
+                            &nbsp;&nbsp;&nbsp;按上架时间排序
+                        </option>
+                    </select>
+                </div>
+                <div th:if="${kind} ne null">
+					<input type="hidden" th:value="${kind}" value="">
+					<select id="selectId2" onchange="paixu(this.value)">
+                        <option value="sales">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按销量排序
+                        </option>
+						<option value="price">
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;按价格排序
+						</option>
+                        <option value="date">
+                            &nbsp;&nbsp;&nbsp;按上架时间排序
+                        </option>
+                    </select>
+                </div>
+
+			</div>
+
+
+<!--商品列表-->
+			<div class="main center" th:if="${productList.size()} ne 0">
+				<div class="mingxing fl mb20" style="border:2px solid #fff;width:230px;cursor:pointer;" onmouseout="this.style.border='2px solid #fff'" onmousemove="this.style.border='2px solid red'" th:each="product:${productList}">
+				<!--排序-->
+					<div class="sub_mingxing" ><a th:href="@{'/product/productInfo?productId='+${product.productId}}"><img th:src="'../update/product/'+ ${product.image}"></a></div>
+					<div class="pinpai">
+						<a th:href="@{'/product/productInfo?productId='+${product.productId}}" th:text="${product.productName}">商品名称</a>
+					</div>
+					<div class="youhui"><a th:text="${product.factory}">生产厂家</a></div>
+					<div class="jiage"><a th:text="${product.price}">单价</a></div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="main center" th:if="${productList.size()} eq 0">
+				没有相关商品
+			</div>
+
+		</div>
+
+
+	<footer class="mt20 center" >
+		<hr/>
+		<div>小米商城-CDIO-第一组</div>
+	</footer>
+
+
+
+    <script>
+        function paixu(name) {
+            var selectType = document.getElementById("selectType").value;
+            var kind = document.getElementById("kind").value;
+            location.href="/product/findKindProduct?kind="+kind+"&orderbyname="+name+"";
+        }
+        window.onload=function () {
+			var selectType = document.getElementById("selectType").value;
+            var kind = document.getElementById("kind").value;
+				if(selectType == "sales"){
+                    if (kind == ""|| kind == "-1"){document.getElementById("selectId1")[0].selected=true;}
+                    else document.getElementById("selectId2")[0].selected=true;
+				}
+				if(selectType == "price"){
+					if (kind == ""|| kind == "-1"){document.getElementById("selectId1")[1].selected=true;}
+                    else document.getElementById("selectId2")[1].selected=true;
+				}
+				if(selectType == "date"){
+                    if (kind == ""|| kind == "-1"){document.getElementById("selectId1")[2].selected=true;}
+                    else document.getElementById("selectId2")[2].selected=true;
+				}
+        }
+    </script>
+	</body>
+</html>

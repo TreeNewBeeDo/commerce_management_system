@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>查询分类订单</title>
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+
+
+<body>
+
+<div >
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>订单号</th>
+            <th>总价</th>
+            <th>下单时间</th>
+            <th>收货人</th>
+            <th>操作</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order:${orders}">
+            <td th:text="${order.orderId}" target="_blank" th:href="@{/order/orderDetail(orderId=${order.orderId},flag=${flag})}"></td>
+            <td th:text="${order.totalPrice}"></td>
+            <td th:text="${order.orderTime.toLocaleString()}"></td>
+            <td th:text="${order.receiver}"></td>
+          <!-- <td th:href="@{'/order/orderDetail?orderId='+${order.orderId}}" th:text="订单详情" ></td>-->
+          <td> <a href="#" target="_blank" th:href="@{/order/orderDetail(orderId=${order.orderId},flag=${flag})}">查看</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+</body>
+</html>

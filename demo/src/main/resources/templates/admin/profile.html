@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <link rel="shortcut icon" href="admins/img/favicon.png">
+
+    <title>XIAO MI</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../admins/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../admins/css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <link href="../admins/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!--right slidebar-->
+    <link href="../admins/css/slidebars.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="../admins/css/style.css" rel="stylesheet">
+    <link href="../admins/css/style-responsive.css" rel="stylesheet" />
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+    <!--[if lt IE 9]>
+    <script src="../admins/js/html5shiv.js"></script>
+    <script src="../admins/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<section id="container" class="">
+    <!--header start-->
+    <header class="header white-bg">
+        <div class="sidebar-toggle-box">
+            <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+        </div>
+        <!--logo start-->
+        <a th:href="@{/login-allot}" class="logo">XIAO<span>MI</span></a>
+
+        <a class="logo">
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            小米商城
+            <span>
+                管理平台
+            </span>
+        </a>
+
+        <!--logo end-->
+
+        <div class="top-nav ">
+            <!--search & user info start-->
+            <ul class="nav pull-right top-menu">
+                <!--<li>-->
+                <!--<input type="text" class="form-control search" placeholder="Search">-->
+                <!--</li>-->
+                <!-- user login dropdown start-->
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <img th:src="'../update/portrait/'+${user.portraitUrl}" width="30px", hight="30px">
+                        <span th:text="${user.name}" class="username" >Jhon Doue</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <div class="log-arrow-up"></div>
+                        <li><a th:href="@{'/user/'+${user.userId}}" href="#"><i class=" fa fa-suitcase"></i>个人资料</a></li>
+                        <li><a th:href="@{/}"><i class="fa fa-cog"></i> 网站首页</a></li>
+                        <!--<li><a href="#"><i class="fa fa-bell-o"></i> Notification</a></li>-->
+                        <li><a th:href="@{/logout}"><i class="fa fa-key"></i> 注销</a></li>
+                    </ul>
+                </li>
+                <li class="sb-toggle-right">
+                    <i class="fa  fa-align-right"></i>
+                </li>
+                <!-- user login dropdown end -->
+            </ul>
+            <!--search & user info end-->
+        </div>
+    </header>
+    <!--header end-->
+    <!--sidebar start-->
+    <aside>
+        <div id="sidebar"  class="nav-collapse ">
+            <!-- sidebar menu start-->
+            <ul class="sidebar-menu" id="nav-accordion">
+                <li>
+                    <a href="/adminIndex">
+                        <i class="fa fa-dashboard"></i>
+                        <span>仪表盘</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a th:href="@{'/user/'+${user.userId}}">
+                        <i class="fa fa-user"></i>
+                        <span>个人资料</span>
+                    </a>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;" class="active">
+                        <i class="fa fa-book"></i>
+                        <span>用户管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a th:href="@{/user/list}">普通用户</a></li>
+                        <li><a th:href="@{/user/adminlist}" >管理员列表</a></li>
+                    </ul>
+                </li>
+                <!-- 商品种类-->
+                <li class="sub-menu">
+                    <a href="javascript:;"  >
+                        <i class="fa fa-th"></i>
+                        <span>商品种类管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li ><a  href="/category/list">种类信息</a></li>
+                        <li><a  href="/category/addcategory?flag=1">增加商品种类</a></li>
+                    </ul>
+                </li>
+                <!--商品管理-->
+                <li class="sub-menu">
+                    <a href="javascript:;" >
+                        <i class="fa fa-bar-chart-o"></i>
+                        <span>商品管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a  href="/product/list">商品列表</a></li>
+                        <li><a  href="/product/addproduct?flag=1">增加商品</a></li>
+                    </ul>
+                </li>
+
+
+                <li class="sub-menu">
+                    <a href="javascript:;" >
+                        <i class="fa fa-tasks"></i>
+                        <span>订单管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="/adminOrder/newOrder">待发货</a></li>
+                        <li><a href="/adminOrder/shippedOrder">已发货</a></li>
+                        <li><a href="/adminOrder/completeOrder">确认收货</a></li>
+                        <li><a href="/adminOrder/askReturnOrder">请求退货</a></li>
+                        <li><a href="/adminOrder/returnedOrder">已退货</a></li>
+                        <li><a href="/adminOrder/seekOrder">查找订单</a></li>
+                    </ul>
+                </li>
+
+
+
+            </ul>
+            <!-- sidebar menu end-->
+        </div>
+    </aside>
+    <!--sidebar end-->
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <!-- page start-->
+            <div class="row">
+                <aside class="profile-nav col-lg-3">
+                    <section class="panel">
+                        <div class="user-heading round">
+                            <a href="#">
+                                <img th:src="@{'../update/portrait/'+${users.portraitUrl}}" alt="">
+                            </a>
+                            <h1 th:text="${users.name}">Jonathan Smith</h1>
+                            <p th:text="${users.email}">jsmith@flatlab.com</p>
+                            <form th:if="${user.userId} eq ${users.userId}" action="/user/updateImage" id="Picture" method="post"  enctype="multipart/form-data">
+                                <input type="file" id="file" name="file" value="更换图片">
+                                <button class="btn btn-success " onclick="pictureSubmit()" >提交</button>
+                            </form>
+                        </div>
+
+                        <ul class="nav nav-pills nav-stacked">
+                            <li class="active"><a th:href="@{'/user/'+${users.userId}}"> <i class="fa fa-user"></i> 个人资料</a></li>
+
+                            <li th:if="${user.userId} eq ${users.userId}">
+                                <a th:href="@{'/user/toUserEdit?userId='+${users.userId}}" > <i class="fa fa-edit"></i> 修改个人资料</a>
+                            </li>
+                        </ul>
+
+                    </section>
+                </aside>
+                <aside class="profile-info col-lg-9">
+                    <!--<section class="panel">-->
+                        <!--<form>-->
+                            <!--<textarea placeholder="Whats in your mind today?" rows="2" class="form-control input-lg p-text-area"></textarea>-->
+                        <!--</form>-->
+                        <!--<footer class="panel-footer">-->
+                            <!--<button class="btn btn-danger pull-right">Post</button>-->
+                            <!--<ul class="nav nav-pills">-->
+                                <!--<li>-->
+                                    <!--<a href="#"><i class="fa fa-map-marker"></i></a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="#"><i class="fa fa-camera"></i></a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="#"><i class=" fa fa-film"></i></a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="#"><i class="fa fa-microphone"></i></a>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</footer>-->
+                    <!--</section>-->
+                    <section class="panel">
+                        <div class="bio-graph-heading">
+                            您的个人资料信息如下
+                        </div>
+                        <div class="panel-body bio-graph-info">
+                            <h1>资料详情</h1>
+                            <div class="row">
+                                <div class="bio-row">
+                                    <p><span>用户名 </span><a th:text="':'+${users.username}">: Jonathan</a></p>
+                                </div>
+                                <div class="bio-row">
+                                    <p><span>姓名 </span><a th:text="':'+${users.name}">: Smith</a> </p>
+                                </div>
+                                <div class="bio-row">
+                                    <p><span>生日 </span><a th:text="':'+${ds.format(users.birth)}">1998-3-12</a> </p>
+                                </div>
+                                <div class="bio-row">
+                                    <p><span>邮箱</span><a th:text="':'+${users.email}">chpyue@foxmail.com</a></p>
+                                </div>
+                                <div class="bio-row">
+                                    <p><span>手机号 </span><a th:text="':'+${users.phone}">: Smith</a> </p>
+                                </div>
+                                <div class="bio-row">
+                                    <p>
+                                        <span>性别 </span>
+                                        <span th:switch="${users.sex}">
+                                            <a th:case="1" th:text="':'+男">男</a>
+                                            <a th:case="2" th:text="':'+女">女</a>
+                                            <a th:case="3" th:text="':'+保密">保密</a>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="bio-row">
+                                    <p><span>地址 </span><a th:text="':'+${users.address}">: Smith</a> </p>
+                                </div>
+                                <div class="bio-row">
+                                    <p><span>邮编 </span><a th:text="':'+${users.postcode}">: Smith</a> </p>
+                                </div>
+                                <div class="bio-row">
+                                    <p><span>注册时间 </span><a th:text="':'+${users.registerTime.toLocaleString()}">: Smith</a> </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </aside>
+            </div>
+
+            <!-- page end-->
+        </section>
+    </section>
+    <!--main content end-->
+
+    <!-- Right Slidebar start -->
+
+
+    <!--footer start-->
+    <footer class="site-footer">
+        <div class="text-center">
+            XIAO MI  小米网上商城
+            <a href="#" class="go-top">
+                <i class="fa fa-angle-up"></i>
+            </a>
+        </div>
+    </footer>
+    <!--footer end-->
+</section>
+
+<!-- js placed at the end of the document so the pages load faster -->
+<script src="../admins/js/jquery.js"></script>
+<script src="../admins/js/bootstrap.min.js"></script>
+<script class="include" type="text/javascript" src="../admins/js/jquery.dcjqaccordion.2.7.js"></script>
+<script src="../admins/js/jquery.scrollTo.min.js"></script>
+<script src="../admins/js/jquery.nicescroll.js" type="text/javascript"></script>
+<script src="../admins/assets/jquery-knob/js/jquery.knob.js"></script>
+<script src="../admins/js/respond.min.js" ></script>
+
+<!--right slidebar-->
+<script src="../admins/js/slidebars.min.js"></script>
+
+<!--common script for all pages-->
+<script src="../admins/js/common-scripts.js"></script>
+
+<script>
+
+    //knob
+    $(".knob").knob();
+
+    //提交图片
+    function pictureSubmit() {
+
+        var Picture = document.getElementById("Picture");
+        var file = document.getElementById("file").value;
+        if (file == "" || file==null){
+            alert("暂未选择图片");
+        }
+        else {
+            Picture.submit;
+        }
+
+    }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:width="http://www.w3.org/1999/xhtml"
+      xmlns:hight="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <link rel="shortcut icon" href="admins/img/favicon.png">
+
+    <title>XIAO MI</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="admins/css/bootstrap.min.css" rel="stylesheet">
+    <link href="admins/css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <link href="admins/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="admins/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="admins/css/owl.carousel.css" type="text/css">
+
+    <!--right slidebar-->
+    <link href="admins/css/slidebars.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+
+    <link href="admins/css/style.css" rel="stylesheet">
+    <link href="admins/css/style-responsive.css" rel="stylesheet" />
+
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+    <!--[if lt IE 9]>
+    <script src="admins/js/html5shiv.js"></script>
+    <script src="admins/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body th:onload="'javascript:loadCountUp('+${userCount}+','+${categoryCount}+','+${productCount}+','+${newOrderCount}+')'">
+
+<section id="container" >
+    <!--header start-->
+    <header class="header white-bg">
+        <div class="sidebar-toggle-box">
+            <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+        </div>
+        <!--logo start-->
+        <a th:href="@{/login-allot}" class="logo">XIAO<span>MI</span></a>
+
+        <a class="logo">
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            小米商城
+            <span>
+                管理平台
+            </span>
+        </a>
+
+        <!--logo end-->
+
+        <div class="top-nav ">
+            <!--search & user info start-->
+            <ul class="nav pull-right top-menu">
+                <!--<li>-->
+                <!--<input type="text" class="form-control search" placeholder="Search">-->
+                <!--</li>-->
+                <!-- user login dropdown start-->
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <img th:src="'../update/portrait/'+${user.portraitUrl}" width="30px", hight="30px">
+                        <span th:text="${user.name}" class="username" >Jhon Doue</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <div class="log-arrow-up"></div>
+                        <li><a th:href="@{'/user/'+${user.userId}}" href="#"><i class=" fa fa-suitcase"></i>个人资料</a></li>
+                        <li><a th:href="@{/}"><i class="fa fa-cog"></i> 网站首页</a></li>
+                        <!--<li><a href="#"><i class="fa fa-bell-o"></i> Notification</a></li>-->
+                        <li><a th:href="@{/logout}"><i class="fa fa-key"></i> 注销</a></li>
+                    </ul>
+                </li>
+                <li class="sb-toggle-right">
+                    <i class="fa  fa-align-right"></i>
+                </li>
+                <!-- user login dropdown end -->
+            </ul>
+            <!--search & user info end-->
+        </div>
+    </header>
+    <!--header end-->
+    <!--sidebar start-->
+    <aside>
+        <div id="sidebar"  class="nav-collapse ">
+            <!-- sidebar menu start-->
+            <ul class="sidebar-menu" id="nav-accordion">
+                <li>
+                    <a class="active" href="/adminIndex">
+                        <i class="fa fa-dashboard"></i>
+                        <span>仪表盘</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{'/user/'+${user.userId}}">
+                        <i class="fa fa-user"></i>
+                        <span>个人资料</span>
+                    </a>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;" >
+                        <i class="fa fa-book"></i>
+                        <span>用户管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a th:href="@{user/list}">普通用户</a></li>
+                        <li><a th:href="@{user/adminlist}" >管理员列表</a></li>
+                    </ul>
+                </li>
+
+                <li class="sub-menu">
+                    <a href="javascript:;" >
+                        <i class="fa fa-th"></i>
+                        <span>商品种类管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a  href="/category/list">种类信息</a></li>
+                        <li><a  href="/category/addcategory?flag=1">增加商品种类</a></li>
+                    </ul>
+                </li>
+
+                <li class="sub-menu">
+                    <a href="javascript:;" >
+                        <i class="fa fa-bar-chart-o"></i>
+                        <span>商品管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a  href="/product/list">商品列表</a></li>
+                        <li><a  href="/product/addproduct?flag=1">增加商品</a></li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;" >
+                        <i class="fa fa-tasks"></i>
+                        <span>订单管理</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="/adminOrder/newOrder">待发货</a></li>
+                        <li><a href="/adminOrder/shippedOrder">已发货</a></li>
+                        <li><a href="/adminOrder/completeOrder">确认收货</a></li>
+                        <li><a href="/adminOrder/askReturnOrder">请求退货</a></li>
+                        <li><a href="/adminOrder/returnedOrder">已退货</a></li>
+                        <li><a href="/adminOrder/seekOrder">查找订单</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+            <!-- sidebar menu end-->
+        </div>
+    </aside>
+    <!--sidebar end-->
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <!--state overview start-->
+            <div class="row state-overview">
+                <div class="col-lg-3 col-sm-6">
+                    <section class="panel">
+                        <div class="symbol terques">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="value">
+                            <h1 class="count">
+                                0
+                            </h1>
+                            <p><a th:href="@{user/list}">用户人数</a></p>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <section class="panel">
+                        <div class="symbol red">
+                            <i class="fa fa-tags"></i>
+                        </div>
+                        <div class="value">
+                            <h1 class=" count2">
+                                0
+                            </h1>
+                            <p><a href="/category/list">商品种类数量</a></p>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <section class="panel">
+                        <div class="symbol yellow">
+                            <i class="fa fa-shopping-cart"></i>
+                        </div>
+                        <div class="value">
+                            <h1 class=" count3">
+                                0
+                            </h1>
+                            <p><a href="/product/list">商品数量</a></p>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <section class="panel">
+                        <div class="symbol blue">
+                            <i class="fa fa-bar-chart-o"></i>
+                        </div>
+                        <div class="value">
+                            <h1 class=" count4">
+                                0
+                            </h1>
+                            <p><a href="/adminOrder/newOrder">待接单数量</a></p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <!--state overview end-->
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <!--custom chart start-->
+                    <div class="border-head">
+                        <h3>商品种类数量图</h3>
+                    </div>
+                    <div class="custom-bar-chart">
+                        <ul class="y-axis">
+                            <li><span>10</span></li>
+                            <li><span>8</span></li>
+                            <li><span>6</span></li>
+                            <li><span>4</span></li>
+                            <li><span>2</span></li>
+                        </ul>
+                        <span th:each="category:${categoryList}">
+                            <div class="bar">
+                                <div class="title" th:text="${category.name}">JAN</div>
+                                <div class="value tooltips" th:attr="data-original-title=${category.count}"
+                                     data-toggle="tooltip" data-placement="top" th:text="${category.count*10}+'%'"></div>
+                            </div>
+                        </span>
+                    </div>
+                    <!--custom chart end-->
+                </div>
+                <div class="col-lg-4">
+                    <!--latest product info start-->
+                    <section class="panel post-wrap pro-box">
+                        <aside>
+                            <div class="post-info">
+                                <span class="arrow-pro right"></span>
+                                <div class="panel-body">
+                                    <h1><strong>XIAOMI</strong> <br> 小米商城</h1>
+                                    <div class="desk yellow">
+                                        <h3>标语</h3>
+                                        <p>小米-为发烧而生。</p>
+                                    </div>
+                                    <div class="post-btn">
+                                        <a href="javascript:;">
+                                            <i class="fa fa-chevron-circle-left"></i>
+                                        </a>
+                                        <a href="javascript:;">
+                                            <i class="fa fa-chevron-circle-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
+                    </section>
+                    <!--latest product info end-->
+                    <!--features carousel start-->
+                    <section class="panel">
+                        <div class="flat-carousal">
+                            <div id="owl-demo" class="owl-carousel owl-theme">
+                                <div class="item">
+                                    <h1>--点击进入用户管理功能--</h1>
+                                    <div class="text-center">
+                                        <a href="user/list" class="view-all">View All</a>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <h1>--点击进入商品种类管理功能--</h1>
+                                    <div class="text-center">
+                                        <a href="/category/list" class="view-all">View All</a>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <h1>--点击进入商品管理功能--</h1>
+                                    <div class="text-center">
+                                        <a href="/product/list" class="view-all">View All</a>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <h1>--点击进入订单管理功能--</h1>
+                                    <div class="text-center">
+                                        <a href="/adminOrder/newOrder" class="view-all">View All</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="ft-link">
+                                <li class="active">
+                                    <a href="user/list">
+                                        <i class="fa fa-user"></i>
+                                        用户管理
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/category/list">
+                                        <i class=" fa fa-tags"></i>
+                                        商品种类管理
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/product/list">
+                                        <i class=" fa fa-shopping-cart"></i>
+                                        商品管理
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/adminOrder/newOrder">
+                                        <i class=" fa fa-bar-chart-o"></i>
+                                        订单管理
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+                    <!--features carousel end-->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <!--user info table start-->
+                    <section class="panel">
+                        <div class="panel-body">
+                            <a href="#" class="task-thumb">
+                                <img src="admins/img/avatar1.jpg" alt="">
+                            </a>
+                            <div class="task-thumb-details">
+                                <h1><a href="#">用户展示</a></h1>
+                                <p>种类及数量</p>
+                            </div>
+                        </div>
+                        <table class="table table-hover personal-task">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <i class=" fa fa-tasks"></i>
+                                </td>
+                                <td>普通用户</td>
+                                <td th:text="${userCount}"> 02</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <i class="fa fa-exclamation-triangle"></i>
+                                </td>
+                                <td>管理员</td>
+                                <td th:text="${adminCount}"> 14</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <i class="fa fa-envelope"></i>
+                                </td>
+                                <td>超级管理员</td>
+                                <td th:text="${rootCount}"> 45</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <!--user info table end-->
+                </div>
+                <div class="col-lg-8">
+                    <!--work progress start-->
+                    <section class="panel">
+                        <div class="panel-body progress-panel">
+                            <div class="task-progress">
+                                <h1>订单展示</h1>
+                                <p>订单状态及数量</p>
+                            </div>
+                        </div>
+                        <table class="table table-hover personal-task">
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    待发货
+                                </td>
+                                <td>
+                                    <span class="badge bg-important" th:text="${order1}">75%</span>
+                                </td>
+                                <td>
+                                    <div><a href="/adminOrder/newOrder">查看</a></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>
+                                    已发货
+                                </td>
+                                <td>
+                                    <span class="badge bg-success" th:text="${order2}">43%</span>
+                                </td>
+                                <td>
+                                    <div><a href="/adminOrder/shippedOrder">查看</a></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>
+                                    确认收货
+                                </td>
+                                <td>
+                                    <span class="badge bg-info" th:text="${order3}">67%</span>
+                                </td>
+                                <td>
+                                    <div><a href="/adminOrder/completeOrder">查看</a></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>
+                                    请求退货
+                                </td>
+                                <td>
+                                    <span class="badge bg-warning" th:text="${order4}">30%</span>
+                                </td>
+                                <td>
+                                    <div><a href="/adminOrder/askReturnOrder">查看</a></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>
+                                   已退货
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary" th:text="${order5}">15%</span>
+                                </td>
+                                <td>
+                                    <div><a href="/adminOrder/returnedOrder">查看</a></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <!--work progress end-->
+                </div>
+            </div>
+
+
+        </section>
+    </section>
+    <!--main content end-->
+    <!--footer start-->
+    <footer class="site-footer">
+        <div class="text-center">
+            XIAO MI  小米网上商城
+            <a href="#" class="go-top">
+                <i class="fa fa-angle-up"></i>
+            </a>
+        </div>
+    </footer>
+    <!--footer end-->
+</section>
+
+<!-- js placed at the end of the document so the pages load faster -->
+<script src="admins/js/jquery.js"></script>
+<script src="admins/js/bootstrap.min.js"></script>
+<script class="include" type="text/javascript" src="admins/js/jquery.dcjqaccordion.2.7.js"></script>
+<script src="admins/js/jquery.scrollTo.min.js"></script>
+<script src="admins/js/jquery.nicescroll.js" type="text/javascript"></script>
+<script src="admins/js/jquery.sparkline.js" type="text/javascript"></script>
+<script src="admins/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js"></script>
+<script src="admins/js/owl.carousel.js" ></script>
+<script src="admins/js/jquery.customSelect.min.js" ></script>
+<script src="admins/js/respond.min.js" ></script>
+
+<!--right slidebar-->
+<script src="admins/js/slidebars.min.js"></script>
+
+<!--common script for all pages-->
+<script src="admins/js/common-scripts.js"></script>
+
+<!--script for this page-->
+<script src="admins/js/sparkline-chart.js"></script>
+<script src="admins/js/easy-pie-chart.js"></script>
+<script src="admins/js/count.js"></script>
+
+<script>
+
+    //owl carousel
+
+    $(document).ready(function() {
+        $("#owl-demo").owlCarousel({
+            navigation : true,
+            slideSpeed : 300,
+            paginationSpeed : 400,
+            singleItem : true,
+            autoPlay:true
+
+        });
+    });
+
+    //custom select box
+
+    $(function(){
+        $('select.styled').customSelect();
+    });
+
+    $(window).on("resize",function(){
+        var owl = $("#owl-demo").data("owlCarousel");
+        owl.reinit();
+    });
+
+</script>
+
+</body>
+</html>

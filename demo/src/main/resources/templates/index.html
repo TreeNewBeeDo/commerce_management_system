@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>im test page</title>
+</head>
+<body>
+
+<div>
+    <div sec:authorize="isAuthenticated()">
+        <p>已有用户登录</p>
+        <p>登录的用户为:<span sec:authentication="name"></span></p>
+        <p>用户角色为:<span sec:authentication="principal.authorities"></span></p>
+        <div>
+            <form action="/logout" th:action="@{/logout}" method="post">
+                <button type="submit">退出登录</button>
+            </form>
+        </div>
+    </div>
+    <div sec:authorize="isAnonymous()">
+        <p>未有用户登录</p>
+        <div>
+            <a href="/login" th:href="@{/login}">登录</a>
+        </div>
+        <div>
+            <a href="/toRegister" th:href="@{/register}">注册</a>
+        </div>
+    </div>
+</div>
+
+<a th:href="@{/user/list}">用户列表</a>
+<a th:href="@{'/cart/list/'+${user.userId}}">我的购物车</a>
+</body>
+</html>

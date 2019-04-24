@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>结算中心</title>
+<link href="../users/jQueryGwc/css/public.css" type="text/css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="../users/jQueryGwc/css/base.css"/>
+        <script type="text/javascript" src="../users/jQueryGwc/js/jquery_cart.js"></script>
+        <link rel="stylesheet" type="text/css" href="../users/jQueryGwc/css/checkOut.css" />
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/users/css/style.css"
+          th:href="@{/users/css/style.css}">
+
+</head>
+
+<body>
+ <!--顶部快捷菜单-->
+ <header>
+     <div class="top center">
+         <div class="left fl">
+             <ul>
+                 <li><a href="/" >小米商城</a></li>
+
+                 <div class="clear"></div>
+             </ul>
+         </div>
+         <div class="right fr">
+             <div class="gouwuche fr"><a th:href="@{/cart/list}" target="_blank">购物车</a></div>
+             <div class="fr">
+                 <ul sec:authorize="isAnonymous()">
+                     <li><a th:href="@{/login}" target="_blank">登录</a></li>
+                     <li>|</li>
+                     <li><a th:href="@{/toRegister}" target="_blank" >注册</a></li>
+                 </ul>
+                 <ul sec:authorize="isAuthenticated()">
+                     <li><a th:text="${user.name}">name</a> </li>
+                     <li>|</li>
+                     <li><a href="/user/user">个人中心</a></li>
+                     <li sec:authorize="hasRole('ROLE_ADMIN')">|</li>
+                     <li sec:authorize="hasRole('ROLE_ADMIN')">
+                         <a th:href="@{/adminIndex}">管理后台</a>
+                     </li>
+                     <li>|</li>
+                     <li>
+                         <a href="/logout">退出登录</a>
+                     </li>
+                 </ul>
+             </div>
+             <div class="clear"></div>
+         </div>
+         <div class="clear"></div>
+     </div>
+ </header>
+
+
+
+ <!--收货地址body部分开始-->
+ <div class="border_top_cart">
+
+<div class="container">
+    <div class="checkout-box">
+        <form  id="checkoutForm" th:action="@{/order/addOrder}" th:method="post" >
+
+    <h2 class="title">订单信息</h2>
+
+<div class="box-bd">
+    <div  style="padding:  50px 50px;">
+        <div class="input-group">
+            <span class="input-group-addon">收货人</span>
+            <input class="form-control"   id="receiver" type="text" name="receiver" th:value="${user.name}" placeholder="请输入收货人姓名" required/>
+        </div>
+        <br>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon">电话</span>
+            <input class="form-control"   id="telephone" type="text"  name="receivePhone" th:value="${user.phone}" pattern="^1[345678]\d{9}$" placeholder="请输入你的电话号码"/>
+            <span class="checkExistRong" id="checkExistPhone"></span>
+        </div>
+        <br>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon">地址</span>
+            <input class="form-control"  id="address"  minlength="10" maxlength="20" name="receiveAddress"  th:value="${address}" required/>
+        </div>
+
+
+    </div>
+
+    <!--点击弹出新增/收货地址界面end-->
+    <div class="xm-edit-addr-backdrop" id="J_editAddrBackdrop"></div>
+</div>
+                <!-- 收货地址 END-->
+                <div id="checkoutPayment">
+                    <!-- 支付方式 -->
+                                <div class="xm-box">
+                <div class="box-hd ">
+                    <h2 class="title">支付方式</h2>
+                </div>
+                <div class="box-bd">
+                    <ul id="checkoutPaymentList" class="checkout-option-list clearfix J_optionList">
+                                                <li class="item selected">
+                            <input type="radio" name="Checkout[pay_id]" checked="checked" value="1">
+                            <p>
+                                在线支付                                <span></span>
+                            </p>
+                        </li>
+                                            </ul>
+                </div>
+            </div>
+            <!-- 支付方式 END-->
+            <div class="xm-box">
+                <div class="box-hd ">
+                    <h2 class="title">配送方式</h2>
+                </div>
+                <div class="box-bd">
+                    <ul id="checkoutShipmentList" class="checkout-option-list clearfix J_optionList">
+                                                <li class="item selected">
+                            <input type="radio" data-price="0" name="Checkout[shipment_id]" checked="checked" value="1">
+                            <p>
+                                快递配送（免运费）                                <span></span>
+                            </p>
+                        </li>
+                                            </ul>
+                </div>
+            </div>
+            <!-- 配送方式 END-->                    <!-- 配送方式 END-->
+                </div>
+                <!-- 送货时间 -->
+                <div class="xm-box">
+                    <div class="box-hd">
+                        <h2 class="title">送货时间</h2>
+                    </div>
+                    <div class="box-bd">
+                        <ul class="checkout-option-list clearfix J_optionList">
+                            <li class="item selected"><input type="radio" checked="checked" name="Checkout[best_time]" value="1"><p>不限送货时间<span>周一至周日</span></p>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="checkoutInvoice">
+                    <div class="xm-box">
+
+            <div class="checkout-box-ft">
+                 <!-- 商品清单 -->
+                <div id="checkoutGoodsList" class="checkout-goods-box">
+                                    <div class="xm-box">
+                    <div class="box-hd">
+                        <h2 class="title">确认订单信息</h2>
+                    </div>
+                    <div class="box-bd">
+                        <dl class="checkout-goods-list">
+                            <dt class="clearfix">
+                                <span class="col col-1">商品名称</span>
+                                <span class="col col-2">购买价格</span>
+                                <span class="col col-3">数量</span>
+                                <span class="col col-4">小计（元）</span>
+                            </dt>
+
+                            <dd class="item clearfix" th:each="productOrderItem:${productOrderItems}">
+                                <div class="item-row">
+                                    <div class="col col-1">
+                                        <div class="g-pic">
+                                            <img th:src="'../update/product/'+${productOrderItem.image}" width="40" height="40" />
+                                        </div>
+                                        <div class="g-info" th:text="${productOrderItem.productName}">
+                                            小米T恤
+                                        </div>
+                                    </div>
+
+                                    <div class="col col-2" th:text="${productOrderItem.price}"></div>
+                                    <div class="col col-3" ><input style="border:none; "  name="numbers"   th:value="${productOrderItem.number}"/></div>
+                                    <div class="col col-4"   th:text="${productOrderItem.getTotalPrice()}"  >12</div>
+
+                                    <input name="cartIds"  type="hidden" th:value="${productOrderItem.cartId}"/>
+                                    <input name="productIds"  type="hidden" th:value="${productOrderItem.productId}"/>
+                                </div>
+                            </dd>
+                            <div class="form-group">
+
+                                <h2 class="title">备注</h2></br>
+                                <div class="col-md-6">
+                                    <textarea class='form-control' name='receiverRemark' onkeyup='textAreaChange(this)' onkeydown='textAreaChange(this)' rows='5' required></textarea>
+                                    <div class='text-right'>
+                                        <em style='color:red'>200</em>/<span>200</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="checkout-price">
+                                <p class="checkout-total">应付总额：<span><input id="totalPrice"  style="border: none" readonly="readonly" name="totalPrice" th:value="${totalPrice}" />元</span></p>
+                            </div>
+                        </dl>
+                </div>
+
+    <!--S 加价购 产品选择弹框 -->
+                <div class="modal hide modal-choose-pro" id="J_choosePro-664">
+                <div class="modal-header">
+                    <span class="close" data-dismiss='modal'><i class="iconfont">&#xe617;</i></span>
+                    <h3>选择产品</h3>
+                    <div class="more">
+                        <div class="xm-recommend-page clearfix">
+                            <a class="page-btn-prev   J_carouselPrev iconfont" href="javascript: void(0);">&#xe604;</a><a class="page-btn-next  J_carouselNext iconfont" href="javascript: void(0);">&#xe605;</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body J_chooseProCarousel">
+                    <div class="J_carouselWrap modal-choose-pro-list-wrap">
+                        <ul class="clearfix J_carouselList">
+                                                    </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-disabled J_chooseProBtn">加入购物车</a>
+                </div>
+            </div>
+                <!--E 加价购 产品选择弹框 -->
+
+    <!--S 保障计划 产品选择弹框 -->
+
+
+                </div>
+                <!-- 商品清单 END -->
+                <input type="hidden"  id="couponType" name="Checkout[couponsType]">
+                <input type="hidden" id="couponValue" name="Checkout[couponsValue]">
+                <div class="checkout-confirm">
+
+                     <a th:href="@{/cart/list}" class="btn btn-lineDakeLight btn-back-cart">返回购物车</a>
+                     <input type="submit" class="btn btn-primary" value="立即下单" id="checkoutToPay" />
+                                     </div>
+            </div>
+            </div>
+            </div>
+                </div>
+
+        </form>
+        <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+        <script type="text/javascript">
+            //显示限制输入字符method
+            function textAreaChange(obj){
+                var $this = $(obj);
+                var count_total = $this.next().children('span').text();
+                var count_input = $this.next().children('em');
+                var area_val = $this.val();
+                if(area_val.len()>count_total){
+                    area_val = autoAddEllipsis(area_val,count_total);//根据字节截图内容
+                    $this.val(area_val);
+                    count_input.text(0);//显示可输入数
+                }else{
+                    count_input.text(count_total - area_val.len());//显示可输入数
+                }
+            }
+            //得到字符串的字节长度
+            String.prototype.len = function(){
+                return this.replace(/[^\x00-\xff]/g, "xx").length;
+            };
+            /*
+             * 处理过长的字符串，截取并添加省略号
+             * 注：半角长度为1，全角长度为2
+             * pStr:字符串
+             * pLen:截取长度
+             * return: 截取后的字符串
+             */
+            function autoAddEllipsis(pStr, pLen) {
+                var _ret = cutString(pStr, pLen);
+                var _cutFlag = _ret.cutflag;
+                var _cutStringn = _ret.cutstring;
+                return _cutStringn;
+            }
+            /*
+             * 取得指定长度的字符串
+             * 注：半角长度为1，全角长度为2
+             * pStr:字符串
+             * pLen:截取长度
+             * return: 截取后的字符串
+             */
+            function cutString(pStr, pLen) {
+                // 原字符串长度
+                var _strLen = pStr.length;
+                var _tmpCode;
+                var _cutString;
+                // 默认情况下，返回的字符串是原字符串的一部分
+                var _cutFlag = "1";
+                var _lenCount = 0;
+                var _ret = false;
+                if (_strLen<= pLen/2){_cutString = pStr;_ret = true;}
+                if (!_ret){
+                    for (var i = 0; i < _strLen ; i++ ){
+                        if (isFull(pStr.charAt(i))){_lenCount += 2;}
+                        else {_lenCount += 1;}
+                        if (_lenCount > pLen){_cutString = pStr.substring(0, i);_ret = true;break;}
+                        else if(_lenCount == pLen){_cutString = pStr.substring(0, i + 1);_ret = true;break;}
+                    }
+                }
+                if (!_ret){_cutString = pStr;_ret = true;}
+                if (_cutString.length == _strLen){_cutFlag = "0";}
+                return {"cutstring":_cutString, "cutflag":_cutFlag};
+            }
+            /*
+             * 判断是否为全角
+             *
+             * pChar:长度为1的字符串
+             * return: true:全角
+             *         false:半角
+             */
+            function isFull (pChar){
+                if((pChar.charCodeAt(0) > 128)){return true;}
+                else{return false;}
+            }
+        </script>
+
+    </div>
+
+
+
+    <script src="../users/jQueryGwc/js/base.min.js"></script>
+
+        <script type="text/javascript" src="../users/jQueryGwc/js/address_all.js"></script>
+<script type="text/javascript" src="../users/jQueryGwc/js/checkout.min.js"></script>
+</div>
+
+ <!--收货地址body部分结束-->
+
+
+
+    <!-- 底部 -->
+    <div class="promise_box">
+    	<div class="w">
+    		<ul>
+        		<li><img src="../users/jQueryGwc/images/promise_img01.jpg"><span>365天不打烊</span></li>
+        		<li><img src="../users/jQueryGwc/images/promise_img02.jpg"><span>无理由退换货</span></li>
+        		<li><img src="../users/jQueryGwc/images/promise_img03.jpg"><span>担保交易</span></li>
+        		<li><img src="../users/jQueryGwc/images/promise_img04.jpg"><span>先行赔付</span></li>
+        		<li><img src="../users/jQueryGwc/images/promise_img05.jpg"><span>支持定制</span></li>
+        	</ul>
+    	</div>
+    </div>
+     <footer class="jumbotron text-center" style="margin-bottom:0">
+         <div class="mt20">哈哈商城|HAHA|哈聊|哈哈书城|哈哈路由器|哈哈天猫店|哈哈淘宝直营店|哈哈移动|隐私政策|</div>
+         <div>©ha.com *ICP证******号 *ICP备********号 *公网安备**********号 *网文[201*]00**-0***号</div>
+         <div>违法和不良信息举报电话：188-3201-****，本网站所列数据，除特殊说明，所有数据均出自我CDIO第一组测试</div>
+     </footer>
+    </div>
+    <!-- 底部 -->
+    <div class="fixed-buttons">
+        <ul>
+            <li><a href="#" class="fixed-weixin"><img src="../users/jQueryGwc/images/fixed_weixin.png" /><div class="weixin-pic"><img src="../users/jQueryGwc/images/weixin_big.jpg"></div></a></li>
+            <li><img id="imgBtn-to-top" src="../users/jQueryGwc/images/back_top.png" /></li>
+        </ul>
+    </div>
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script src="../users/jQueryGwc/js/unslider.min.js" type="text/javascript"></script>
+    <script src="../users/jQueryGwc/js/index.js" type="text/javascript"></script>
+
+
+ </div>
+</body>
+</html>
